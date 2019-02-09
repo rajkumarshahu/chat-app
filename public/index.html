@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Socket.IO Chat Example</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="login text-center">
+              <form id="frmLogin">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Nick name</label>
+                  <input type="text" class="form-control" id="exampleInputPassword1" name ="nickName" placeholder="Enter Nick name">
+                </div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+              </form>
+  </div>
+  <section class="chatroom">
+    <div><span class="reguser"></span></div>
+    <div class="chatroom_left"></div>
+    <div class="chatroom_right"></div>
+    <input class="message" type="text" maxlength="14" />
+    <button id="test">Test</button>
+  </section>
+  
+  
+
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>

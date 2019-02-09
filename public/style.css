@@ -1,0 +1,19 @@
+.chatroom {
+    width:  100%;
+    background-color: black;
+    color: white;
+    padding: 1px;
+    height: 200px;
+}
+.chatroom_left {
+    width: 70%;
+    float: left;
+    background: red;
+    height: 100%;
+}
+.chatroom_right {
+    width: 29%;
+    float: right;
+    background: green;
+    height: 100%;
+}
