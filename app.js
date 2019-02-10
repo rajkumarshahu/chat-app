@@ -1,18 +1,19 @@
-var express = require('express');
-var app = express();
+//var express = require('express');
+var serve = require('koa-static');
+var koa = require('koa');
+var app = new koa();//express();
 var path = require('path');
-var server = require('http').createServer(app);
+var server = require('http').createServer(app.callback());
 var io = require('socket.io')(server);
 
 const PORT = process.env.PORT || 5001;
 
-//
 var userList = [] ;
 
 
 // Routing
-
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(app.static(path.join(__dirname, 'public')));
+app.use(serve(path.join(__dirname, 'public')));
 
 
 //Socket listen by server
