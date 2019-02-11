@@ -26,10 +26,26 @@ $(function() {
        }
     });
  
+    socket.on('register user', (v) => {
+      if (v != null) {
+        messageboard.append("<p>" + v + " : Join the chatRoom. </p>")
+      }
+    });
     socket.on('sendmessage', (v) => {
      messageboard.append("<p>" + v.currentuser + " : " +  v.message + "</p>")
     });
- 
+
+   socket.on('disconnect', (v) => {
+      /*if (v == $('#exampleInputEmail1').val()) {
+        $('.chatroom').hide();
+        $(frmLogin).show();
+      } else {
+      */
+     if (v != null) {
+      messageboard.append("<p>" + v + " : leave from chat. </p>")
+     }
+      //}
+    });
     function clearmsg()
     {
       $('.message').val('');

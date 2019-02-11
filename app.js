@@ -25,12 +25,14 @@ io.on('connection', function(socket) {
     console.log('welcome...');
     socket.on('register user', (v) => { //, (v, callback)
        const email = v.split('&')[0].split('=')[1];
+       socket.userName = email;
        checkEmail(email, (r) => {
            if (!r) {
                const emailObject = {'email': email};
                userList.push(emailObject);
                socket.userName = email;
-               socket.emit('job', userList);   // send jobs
+               socket.emit('join', userList);   // send jobs
+               io.sockets.emit('register user', socket.userName);
            }
            else {
                console.log('already done' +  email);
@@ -44,6 +46,12 @@ io.on('connection', function(socket) {
         //messageList.push(v);
         // we tell the client to execute 'new message'
        io.sockets.emit('sendmessage', v);
+    });
+
+    // disconnect 
+    socket.on('disconnect', () => {
+        //socket.disconnect(true);
+        io.sockets.emit('disconnect', socket.userName);
     });
 });
 
