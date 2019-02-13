@@ -3,9 +3,15 @@
     background-color: black;
     color: white;
     padding: 1px;
-    height: 200px;
+    height: 600px;
 }
 .chatroom_left {
+    width: 70%;
+    float: left;
+    background: red;
+    height: 100%;
+}
+.chatroom_left_room {
     width: 70%;
     float: left;
     background: red;

@@ -21,8 +21,16 @@ app.use(serve(path.join(__dirname, 'public')));
 var numuser = 0 ;
 //var messageList = [];
 
+const roomList = []
+
 io.on('connection', function(socket) {
     console.log('welcome...');
+    socket.on('joinroom', (roomname) => {
+        socket.join(roomname);
+        socket.roomList.push({'roomname': roomname, 'username': socket.userName});
+        socket.roomName = roomname;
+        io.sockets.to(roomname).emit('joinroom', socket.userName, socket.roomName)
+    });
     socket.on('register user', (v) => { //, (v, callback)
        const email = v.split('&')[0].split('=')[1];
        socket.userName = email;
@@ -31,8 +39,9 @@ io.on('connection', function(socket) {
                const emailObject = {'email': email};
                userList.push(emailObject);
                socket.userName = email;
-               socket.emit('join', userList);   // send jobs
-               io.sockets.emit('register user', socket.userName);
+               socket.roomList = roomList;
+               //socket.emit('join', userList);   // send jobs
+               io.sockets.emit('register user', socket.userName, socket.roomList);
            }
            else {
                console.log('already done' +  email);
@@ -42,10 +51,14 @@ io.on('connection', function(socket) {
 
     //Send message 
     socket.on('sendmessage', (v) => {
-        console.log(v);
-        //messageList.push(v);
-        // we tell the client to execute 'new message'
-       io.sockets.emit('sendmessage', v);
+       console.log(socket.roomList)
+       const room = socket.roomList.find(x => x.username === socket.userName);
+       if (room === undefined) {
+        io.sockets.emit('sendmessage', v);
+       }
+       else {
+            io.sockets.to(room.roomname).emit('sendmessagetoroom', v);
+       }
     });
 
     // disconnect 

@@ -3,6 +3,9 @@ $(function() {
      var socket = io();
      var currentUser = null;
      var messageboard = $('.chatroom_left');
+     var roomboard = $('.chatroom_right');
+     var messageboardroom = $('.chatroom_left_room');
+     var roomList = [];
 
 
     socket.on('job', function(v) {});
@@ -26,15 +29,49 @@ $(function() {
        }
     });
  
-    socket.on('register user', (v) => {
-      if (v != null) {
-        messageboard.append("<p>" + v + " : Join the chatRoom. </p>")
+    $("ul li button").on('click', function() {
+      const roomName = $(this).text();
+      if (confirm('Do you want to Join ' + roomName)){
+         socket.emit('joinroom', roomName);
       }
     });
+
+    socket.on('joinroom', (username, roomname) => {
+      if (currentUser === username) {
+        messageboard.hide();
+        messageboardroom.show();
+        messageboardroom.append("<p>" + username + " : Join the new room : "  + roomname + " </p>")
+      } 
+      messageboard.append("<p>" + username + " : Join the new room : "  + roomname + " </p>")
+    });
+  
+ 
+    socket.on('register user', (username, roomlist) => {
+      if (username != null) {
+        //let _htmlString = "";
+        if (roomList.length <= 0) {
+          roomList = roomlist;
+          /*_htmlString = "<ul id='rul'>";
+          for(let i = 0; i < roomList.length;i++)
+          {
+              _htmlString += "<li onclick='onClickRoom()'>" + roomList[i].roomName + "</li>"
+             
+          }
+          _htmlString += "</ul>";
+        */
+        }
+        messageboard.append("<p>" + username + " : Join the chatRoom. </p>")
+      }
+    });
+
     socket.on('sendmessage', (v) => {
      messageboard.append("<p>" + v.currentuser + " : " +  v.message + "</p>")
     });
 
+    socket.on('sendmessagetoroom', (v) => {
+      messageboardroom.append("<p>" + v.currentuser + " : " +  v.message + "</p>")
+    })
+    
    socket.on('disconnect', (v) => {
       /*if (v == $('#exampleInputEmail1').val()) {
         $('.chatroom').hide();
@@ -56,6 +93,7 @@ $(function() {
      {
        $(".chatroom").hide();
        $('#frmLogin').show();
+       messageboardroom.hide();
      }
  
      init();
