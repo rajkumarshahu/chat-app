@@ -8,41 +8,71 @@
   <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
 </head>
-<body>
-  <div class="login text-center">
+<body ng-app="myApp" ng-controller="myCtrl">
+  <div class="login text-center" ng-show="logInSection" >
               <form id="frmLogin">
-                <div class="form-group">
+                <div class="form-group" ng-model="login">
                   <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                  <input type="email" class="form-control" 
+                  id="exampleInputEmail1" name="email" 
+                  aria-describedby="emailHelp" 
+                  placeholder="Enter email"
+                  ng-model="login.email">
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Nick name</label>
-                  <input type="text" class="form-control" id="exampleInputPassword1" name ="nickName" placeholder="Enter Nick name">
+                  <input type="text" class="form-control" 
+                  id="exampleInputPassword1" name ="nickName" 
+                  placeholder="Enter Nick name"
+                  ng-model="login.nickName">
                 </div>
-                <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+                <button type="button" class="btn btn-primary" 
+                id="btnSubmit" ng-click="onLoginClick()">Submit</button>
               </form>
   </div>
-  <section class="chatroom">
-    <div><span class="reguser"></span></div>
-    <div class="chatroom_left"></div>
-    <div class="chatroom_left_room"></div>
+  <section class="chatroom" ng-show="chatSection" >
+    <div><span class="reguser">{{login.nickName}}</span></div>
+    <div class="chatroom_left" ng-show="chatSectionLeft">
+       <table>
+         <tbody>
+           <tr ng-repeat="chat in chatMessage">
+              <td>
+                {{chat.user}}
+              </td>
+              <td>
+                {{chat.message}}
+              </td>
+           </tr>
+         </tbody>
+       </table>
+    </div>
+    <div class="chatroom_left_room" ng-show="chatSectionLeftRoom">
+        <table>
+            <tbody>
+              <tr ng-repeat="chat in privatechatMessage">
+                 <td>
+                   {{chat.user}}
+                 </td>
+                 <td>
+                   {{chat.message}}
+                 </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
     <div class="chatroom_right">
-      <ul>
-        <li><button id="room1">ROOM1</button></li>
-        <li><button id="room2">ROOM2</button></li>
-        <li><button id="room3">ROOM3</button></li>
-        <li><button id="room4">ROOM4</button></li>
-        <li><button id="room5">ROOM5</button></li>
-        <li><button id="room6">ROOM6</button></li>
+      <ul ng-repeat= "room in roomList">
+        <li ng-click="onClickRoom(room)">{{room.name}}</li>
       </ul>
     </div>
-    <input class="message" type="text" maxlength="14" />
-    <button id="test">Test</button>
+    <input class="message" type="text" maxlength="14" ng-model="message" />
+    <button id="test" ng-click="onClickSend()">SEND</button>
   </section>
   
   
 
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/main.js"></script>
 </body>

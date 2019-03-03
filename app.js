@@ -21,10 +21,19 @@ app.use(serve(path.join(__dirname, 'public')));
 var numuser = 0 ;
 //var messageList = [];
 
-const roomList = []
+const roomList = [{id: 1, name: 'room1'}, {id: 2, name: 'room2'}]
+const chatMessage = [];
+
+const addChatMessage = function(user, message, room) {
+    const _chatmessage = {
+        user: user,
+        message: message,
+        room: room
+    }
+    chatMessage.push(_chatmessage);
+}
 
 io.on('connection', function(socket) {
-    console.log('welcome...');
     socket.on('joinroom', (roomname) => {
         socket.join(roomname);
         socket.roomList.push({'roomname': roomname, 'username': socket.userName});
@@ -32,7 +41,7 @@ io.on('connection', function(socket) {
         io.sockets.to(roomname).emit('joinroom', socket.userName, socket.roomName)
     });
     socket.on('register user', (v) => { //, (v, callback)
-       const email = v.split('&')[0].split('=')[1];
+       const email = v.email;//v.split('&')[0].split('=')[1];
        socket.userName = email;
        checkEmail(email, (r) => {
            if (!r) {
@@ -40,8 +49,11 @@ io.on('connection', function(socket) {
                userList.push(emailObject);
                socket.userName = email;
                socket.roomList = roomList;
-               //socket.emit('join', userList);   // send jobs
-               io.sockets.emit('register user', socket.userName, socket.roomList);
+               socket.chatMessage = chatMessage;
+               
+               addChatMessage(email, 'Joined', null);
+
+               io.sockets.emit('register user', socket.userName, socket.roomList, socket.chatMessage);
            }
            else {
                console.log('already done' +  email);
@@ -51,7 +63,6 @@ io.on('connection', function(socket) {
 
     //Send message 
     socket.on('sendmessage', (v) => {
-       console.log(socket.roomList)
        const room = socket.roomList.find(x => x.username === socket.userName);
        if (room === undefined) {
         io.sockets.emit('sendmessage', v);
@@ -63,7 +74,7 @@ io.on('connection', function(socket) {
 
     // disconnect 
     socket.on('disconnect', () => {
-        //socket.disconnect(true);
+        
         io.sockets.emit('disconnect', socket.userName);
     });
 });
