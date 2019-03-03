@@ -1,79 +1,129 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Socket.IO Chat Example</title>
+    <meta charset="UTF-8">
+    <title>Socket.IO Chat Example</title>
 
-  <!-- Bootstrap core CSS -->
-  <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 </head>
-<body ng-app="myApp" ng-controller="myCtrl">
-  <div class="login text-center" ng-show="logInSection" >
-              <form id="frmLogin">
-                <div class="form-group" ng-model="login">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" 
-                  id="exampleInputEmail1" name="email" 
-                  aria-describedby="emailHelp" 
-                  placeholder="Enter email"
-                  ng-model="login.email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Nick name</label>
-                  <input type="text" class="form-control" 
-                  id="exampleInputPassword1" name ="nickName" 
-                  placeholder="Enter Nick name"
-                  ng-model="login.nickName">
-                </div>
-                <button type="button" class="btn btn-primary" 
-                id="btnSubmit" ng-click="onLoginClick()">Submit</button>
-              </form>
-  </div>
-  <section class="chatroom" ng-show="chatSection" >
-    <div><span class="reguser">{{login.nickName}}</span></div>
-    <div class="chatroom_left" ng-show="chatSectionLeft">
-       <table>
-         <tbody>
-           <tr ng-repeat="chat in chatMessage">
-              <td>
-                {{chat.user}}
-              </td>
-              <td>
-                {{chat.message}}
-              </td>
-           </tr>
-         </tbody>
-       </table>
-    </div>
-    <div class="chatroom_left_room" ng-show="chatSectionLeftRoom">
-        <table>
-            <tbody>
-              <tr ng-repeat="chat in privatechatMessage">
-                 <td>
-                   {{chat.user}}
-                 </td>
-                 <td>
-                   {{chat.message}}
-                 </td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
-    <div class="chatroom_right">
-      <ul ng-repeat= "room in roomList">
-        <li ng-click="onClickRoom(room)">{{room.name}}</li>
-      </ul>
-    </div>
-    <input class="message" type="text" maxlength="14" ng-model="message" />
-    <button id="test" ng-click="onClickSend()">SEND</button>
-  </section>
-  
-  
 
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/main.js"></script>
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <span class="navbar-brand">Chat App</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                Navbar text with an inline element
+              </span>
+            </div>
+        </nav>
+
+        <div class="login text-center" ng-show="logInSection">
+
+            <form id="frmLogin" class="p-4">
+                <div class="form-group" ng-model="login">
+                    <label for="exampleInputEmail1"><b>Email address</b></label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email" ng-model="login.email">
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputPassword1"><b>Nick name</b></label>
+                    <input type="text" class="form-control" id="exampleInputPassword1" name="nickName" placeholder="Enter Nick name" ng-model="login.nickName">
+                </div>
+
+                <button type="button" class="btn btn-primary" id="btnSubmit" ng-click="onLoginClick()">Submit</button>
+
+            </form>
+        </div>
+
+        <div class="row bg-dark  m-1 text-white" ng-show="chatSection">
+            <div class="col-12"><span class="reguser">{{login.nickName}}</span></div>
+        </div>
+
+        <div class="row" ng-show="chatSection">
+            <div class="col-12">
+                <div class="" ng-show="chatSectionLeft">
+                    <table class="table">
+                        <tbody>
+                            <tr ng-repeat="chat in chatMessage">
+                                <td>
+                                    {{chat.user}}
+                                </td>
+                                <td>
+                                    {{chat.message}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chatroom_left_room card" ng-show="chatSectionLeftRoom">
+                            <table class="table  text-dark">
+                                <tbody>
+                                    <tr ng-repeat="chat in privatechatMessage">
+                                        <td>
+                                            {{chat.user}}
+                                        </td>
+                                        <td>
+                                            {{chat.message}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chatroom_right card">
+                            <p class="h4">Choose your room</p>
+                            <ul ng-repeat="room in roomList" class="list-group text-center">
+                                <li ng-click="onClickRoom(room)" class="list-group-item"><button class="btn btn-light" id="room1">{{room.name}}</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-2">
+                <div class="col-7">
+                    <input class="message form-group" type="text" maxlength="14" ng-model="message" />
+                </div>
+                <div class="col-3">
+                    <button id="test" class="btn btn-primary mb-2" ng-click="onClickSend()">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/main.js"></script>
 </body>
+
 </html>
