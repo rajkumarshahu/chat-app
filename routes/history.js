@@ -9,7 +9,6 @@ mongoose.set('useFindAndModify', false);
 mongoose.connect('mongodb://raj:raj667@ds117829.mlab.com:17829/chat-app', { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-//console.log('mongodb connected');
 
 router.get('/api/history', async(ctx) => {
     ctx.body = await ctx.app.db.collection('chathistory').find().toArray();
@@ -19,9 +18,9 @@ router.post('/api/roomhistory', async(ctx) => {
     const requestbody = ctx.request.body;
     if (requestbody[0].roomname != '') {
         var roomname = await requestbody[0].roomname;
-        db.collection('chathistory').find({ roomName: roomname }).toArray((err, collection) => {
-            console.log(collection);
-        });
+        ctx.body = await db.collection('chathistory').find({ roomName: roomname }).toArray();
+
+
     }
 });
 
