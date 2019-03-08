@@ -143,10 +143,9 @@ const eventLog = function(event, username) {
     const _eventlog = {
         'event': event,
         'date': new Date(),
-        'time': now.getTime(),
         'user': username
     }
-    db.collection('eventlogs').insert(_eventlog);
+    db.collection('eventlogs').insertOne(_eventlog);
 }
 
 server.listen(PORT, () => {
