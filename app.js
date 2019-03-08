@@ -23,7 +23,7 @@ app.db = db;
 db.on('error', console.error.bind(console, 'connection error:'));
 //console.log('mongodb connected');
 
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 5000;
 
 var userList = [];
 
